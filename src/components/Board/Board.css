@@ -1,0 +1,25 @@
+div .topRow {
+    width: 100%;
+}
+
+div .middleRow {
+    display: inline-grid;
+    grid-template-columns: [firstHand] 1fr [ddTable] 150px [secondHand] 1fr [end];
+    width: 100%;
+}
+
+div .bottomRow {
+    width: 100%;
+}
+
+div .Board{
+    display: grid;
+    grid-template-rows: repeat(3, 33%); /* Don't know why repeat(3, 1fr) does not work*/ 
+    height: 100%;
+}
+
+html, body, #root, .wholePage
+{
+    height: 100%;
+    width: 100%;
+}

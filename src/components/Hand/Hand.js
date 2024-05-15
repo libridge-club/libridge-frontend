@@ -7,7 +7,7 @@ export default function Hand({ cards, onClick }) {
             <Card
                 suit={card.suit}
                 rank={card.rank}
-                onClick={() => onClick(card.key)}
+                /*onClick={() => onClick(card.key)}*/
             />
         </li>
     });

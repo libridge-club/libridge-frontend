@@ -1,12 +1,20 @@
 ol.handOrderedList {
     list-style-type: none;
-    margin: 0;
     padding: 0;
-    max-width: 455px;
-    display: flex;
+    margin-block: 0;
+    height: 100%;
 }
 
 li.cardListItem {
-    min-width: 0px;
-    min-height: 0px;
+    display: inline-block;
+    width: 40px;
+    height: 100%;
+}
+
+div .Hand {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+    overflow-x: auto;
 }

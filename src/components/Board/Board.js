@@ -1,3 +1,4 @@
+import './Board.css';
 import { useEffect, useState } from "react";
 import DoubleDummyTable from "../DoubleDummyTable/DoubleDummyTable";
 import Hand from "../Hand/Hand";
@@ -34,13 +35,13 @@ export default function Board() {
         let ignore = false;
         async function startFetching() {
             getBoardEntityFromServerPromise().then(outsideBoard => {
-                console.log("BoardEntity from server");
-                console.log(outsideBoard);
+                // console.log("BoardEntity from server");
+                // console.log(outsideBoard);
                 if (!ignore) {
-                    console.log("Setting new cards!");
+                    // console.log("Setting new cards!");
                     setAllHands(outsideBoard["board"]["hands"])
-                    console.log("Setting double dummy values:")
-                    console.log(outsideBoard["doubleDummyTable"])
+                    // console.log("Setting double dummy values:")
+                    // console.log(outsideBoard["doubleDummyTable"])
                     setDoubleDummyTableValues(outsideBoard["doubleDummyTable"])
                 }
             });
@@ -79,11 +80,11 @@ export default function Board() {
     function handleDrawHand() {
         resetAllHands();
         getBoardEntityFromServerPromise().then((outsideBoard) => {
-            console.log("Setting new cards!");
-            console.log(outsideBoard);
+            // console.log("Setting new cards!");
+            // console.log(outsideBoard);
             setAllHands(outsideBoard["board"]["hands"]);
-            console.log("Setting double dummy values:")
-            console.log(outsideBoard["doubleDummyTable"])
+            // console.log("Setting double dummy values:")
+            // console.log(outsideBoard["doubleDummyTable"])
             setDoubleDummyTableValues(outsideBoard["doubleDummyTable"])
         });
     }
@@ -102,13 +103,21 @@ export default function Board() {
     const [doubleDummyTableValues, setDoubleDummyTableValues] = useState({});
 
     return (
-        <div className="Board">
-            <button onClick={handleDrawHand}>Draw hand</button>
-            <Hand cards={cardsNorth} onClick={handleClick} />
-            <Hand cards={cardsEast} onClick={handleClick} />
-            <Hand cards={cardsSouth} onClick={handleClick} />
-            <Hand cards={cardsWest} onClick={handleClick} />
-            <DoubleDummyTable values={doubleDummyTableValues} />
+        <div className="wholePage">
+            <div className="Board">
+                <div className="topRow">
+                    <Hand cards={cardsNorth} onClick={handleClick} />
+                </div>
+                <div className="middleRow">
+                    <Hand cards={cardsEast} onClick={handleClick} />
+                    <DoubleDummyTable values={doubleDummyTableValues} onHandleDrawHand={handleDrawHand}/>
+                    <Hand cards={cardsSouth} onClick={handleClick} />
+                </div>
+                <div className="bottomRow">
+                    <Hand cards={cardsWest} onClick={handleClick} />
+                </div>
+                
+            </div>
         </div>
     );
 

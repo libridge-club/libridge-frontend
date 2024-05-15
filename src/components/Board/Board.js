@@ -4,9 +4,13 @@ import DoubleDummyTable from "../DoubleDummyTable/DoubleDummyTable";
 import Hand from "../Hand/Hand";
 export default function Board() {
 
+    let SERVER_URL=process.env.REACT_APP_BACKEND_URL
+    let API_ENDPOINT="randomBoard"
+    let FULL_URL= SERVER_URL + API_ENDPOINT 
+
     function getBoardEntityFromServerPromise() {
-        // console.log("Calling fetch");
-        return fetch('http://localhost:8080/randomBoard')
+        console.log("Calling fetch at " + FULL_URL);
+        return fetch(FULL_URL)
             .then(response => {
                 // console.log("Success:");
                 // console.log(response);

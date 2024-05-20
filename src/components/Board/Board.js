@@ -110,15 +110,15 @@ export default function Board() {
         <div className="wholePage">
             <div className="Board">
                 <div className="topRow">
-                    <Hand cards={cardsNorth} onClick={handleClick} />
+                    <Hand cards={cardsNorth} onClick={handleClick} id="cardsNorth"/>
                 </div>
                 <div className="middleRow">
-                    <Hand cards={cardsEast} onClick={handleClick} />
+                    <Hand cards={cardsWest} onClick={handleClick} id="cardsWest" />
                     <DoubleDummyTable values={doubleDummyTableValues} onHandleDrawHand={handleDrawHand}/>
-                    <Hand cards={cardsSouth} onClick={handleClick} />
+                    <Hand cards={cardsEast} onClick={handleClick} id="cardsEast" />
                 </div>
                 <div className="bottomRow">
-                    <Hand cards={cardsWest} onClick={handleClick} />
+                    <Hand cards={cardsSouth} onClick={handleClick} id="cardsSouth" />
                 </div>
                 
             </div>

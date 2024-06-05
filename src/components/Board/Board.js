@@ -5,7 +5,7 @@ import Hand from "../Hand/Hand";
 export default function Board() {
 
     let SERVER_URL=process.env.REACT_APP_BACKEND_URL
-    let API_ENDPOINT="randomBoard"
+    let API_ENDPOINT="boards/getRandom"
     let FULL_URL= SERVER_URL + API_ENDPOINT 
 
     function getBoardEntityFromServerPromise() {

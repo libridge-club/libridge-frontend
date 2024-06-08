@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Board from './components/Board/Board';
 import './index.css';
+import Client from './components/Client/Client';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Board />
+    <Client />
   </React.StrictMode>
 );
 

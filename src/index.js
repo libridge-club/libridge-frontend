@@ -1,12 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import BiddingBox from './components/BiddingBox/BiddingBox';
 import Client from './components/Client/Client';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Client />,
+  },
+  {
+    path: "/biddingBox",
+    element: <BiddingBox firstPossibleBid="3D" mayDouble="false" mayRedouble="true" />,
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Client />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

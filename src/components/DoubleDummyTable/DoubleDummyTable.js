@@ -33,7 +33,7 @@ export default function DoubleDummyTable({ values, onHandleDrawHand }) {
                     {header}
                     {allRows}
                 </table>
-                <button onClick={onHandleDrawHand}>Draw hand</button>
+                <button onClick={onHandleDrawHand}>Draw random board</button>
             </div>
         );
     }

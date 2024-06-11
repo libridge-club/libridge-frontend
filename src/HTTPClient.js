@@ -76,5 +76,20 @@ export default class HTTPClient {
                 return console.error(error);
             });
     }
+    
+    getRandomBoardFromServerPromise() {
+        const API_ENDPOINT="boards/getRandom"
+        const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
+        return this.fetchGet(FULL_URL);
+    }
+
+    async getRandomBoard() {
+        return this.getRandomBoardFromServerPromise()
+            .then(randomBoard => randomBoard)
+            .catch(error => {
+                console.error('ERROR!');
+                return console.error(error);
+            });
+    }
 
 }

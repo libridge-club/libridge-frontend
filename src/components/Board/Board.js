@@ -2,29 +2,10 @@ import './Board.css';
 import { useEffect, useState } from "react";
 import DoubleDummyTable from "../DoubleDummyTable/DoubleDummyTable";
 import Hand from "../Hand/Hand";
+import HTTPClient from '../../HTTPClient';
 export default function Board() {
 
-    let SERVER_URL=process.env.REACT_APP_BACKEND_URL
-    let API_ENDPOINT="boards/getRandom"
-    let FULL_URL= SERVER_URL + API_ENDPOINT 
-
-    function getBoardEntityFromServerPromise() {
-        console.log("Calling fetch at " + FULL_URL);
-        return fetch(FULL_URL)
-            .then(response => {
-                // console.log("Success:");
-                // console.log(response);
-                return response.json();
-            })
-            .then(data => {
-                // console.log('Fetched data:', data);
-                return data;
-            })
-            .catch(error => {
-                // console.error('ERROR!');
-                return console.error(error);
-            });
-    }
+    const myHttpClient = new HTTPClient();
 
     function addKeyToCards(cards) {
         return cards.map(card => {
@@ -35,28 +16,12 @@ export default function Board() {
         })
     }
 
-    useEffect(() => {
-        let ignore = false;
-        async function startFetching() {
-            getBoardEntityFromServerPromise().then(outsideBoard => {
-                // console.log("BoardEntity from server");
-                // console.log(outsideBoard);
-                if (!ignore) {
-                    // console.log("Setting new cards!");
-                    setAllHands(outsideBoard["board"]["hands"])
-                    // console.log("Setting double dummy values:")
-                    // console.log(outsideBoard["doubleDummyTable"])
-                    setDoubleDummyTableValues(outsideBoard["doubleDummyTable"])
-                }
-            });
-        }
-
-        startFetching();
-
-        return () => {
-            ignore = true;
-        };
-    }, []);
+    async function handlerDrawNewBoard(){
+        resetAllHands();
+        const randomBoard = await myHttpClient.getRandomBoard();
+        setAllHands(randomBoard["board"]["hands"]);
+        setDoubleDummyTableValues(randomBoard["doubleDummyTable"])
+    }
 
     function getCardUniqueKey({ suit, rank }) {
         return suit + rank;
@@ -81,18 +46,6 @@ export default function Board() {
         setCardsWest(addKeyToCards(hands["WEST"]["cards"]));
     }
 
-    function handleDrawHand() {
-        resetAllHands();
-        getBoardEntityFromServerPromise().then((outsideBoard) => {
-            // console.log("Setting new cards!");
-            // console.log(outsideBoard);
-            setAllHands(outsideBoard["board"]["hands"]);
-            // console.log("Setting double dummy values:")
-            // console.log(outsideBoard["doubleDummyTable"])
-            setDoubleDummyTableValues(outsideBoard["doubleDummyTable"])
-        });
-    }
-
     function removeCard(key) {
         setCardsNorth(cardsNorth.filter((value) => value.key !== key));
         setCardsEast(cardsEast.filter((value) => value.key !== key));
@@ -108,13 +61,14 @@ export default function Board() {
 
     return (
         <div className="wholePage">
+            <button onClick={handlerDrawNewBoard}>Draw random board</button>
             <div className="Board">
                 <div className="topRow">
                     <Hand cards={cardsNorth} onClick={handleClick} id="cardsNorth"/>
                 </div>
                 <div className="middleRow">
                     <Hand cards={cardsWest} onClick={handleClick} id="cardsWest" />
-                    <DoubleDummyTable values={doubleDummyTableValues} onHandleDrawHand={handleDrawHand}/>
+                    <DoubleDummyTable values={doubleDummyTableValues} onHandleDrawHand={handlerDrawNewBoard}/>
                     <Hand cards={cardsEast} onClick={handleClick} id="cardsEast" />
                 </div>
                 <div className="bottomRow">

@@ -1,0 +1,67 @@
+div .BiddingBox {
+    border-style: solid;
+    border: 1px solid black;
+    width: 300px;
+}
+
+div .biddingBox_firstRow{
+    display:grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: 1;
+}
+
+.biddingBox_passButton {
+    grid-column: 1 / span 2;
+    grid-row: 1 / 2;
+}
+#NumberButton_1 {
+    grid-column: 3 / span 1;
+    grid-row: 1 / 2;
+}
+.biddingBox_numberButton {
+    grid-column-end: span 1;
+    grid-row: 1 / 2;
+}
+
+div .biddingBox_secondRow{
+    display:grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: 1;
+}
+.biddingBox_doubleButton {
+    grid-column: 1 / span 2;
+    grid-row: 1 / 2;
+}
+.biddingBox_redoubleButton {
+    grid-column: 1 / span 2;
+    grid-row: 1 / 2;
+}
+#strainButton_C {
+    grid-column: 3 / span 1;
+    grid-row: 1 / 2;
+}
+#strainButton_D {
+    grid-column: 4 / span 1;
+    grid-row: 1 / 2;
+}
+#strainButton_H {
+    grid-column: 5 / span 1;
+    grid-row: 1 / 2;
+}
+#strainButton_S {
+    grid-column: 6 / span 1;
+    grid-row: 1 / 2;
+}
+#strainButton_N {
+    grid-column: 7 / span 1;
+    grid-row: 1 / 2;
+}
+
+
+button[selectedlevel="true"] {
+    border: 3px solid green;
+}
+
+button[selectedstrain="true"] {
+    border: 3px solid green;
+}

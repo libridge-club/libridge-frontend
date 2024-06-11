@@ -5,14 +5,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Client from './components/Client/Client';
 import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
 import Board from './components/Board/Board';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Client />,
+    element: <OpeningTrainer />, // FIXME fix routing and make /openingTrainer available
   },
   {
     path: "/openingTrainer",

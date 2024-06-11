@@ -3,11 +3,16 @@ export default class HTTPClient {
     static SERVER_URL=process.env.REACT_APP_BACKEND_URL
 
     fetchComplete(url, method, headers, myBody){
-        return fetch(url, {
-            method,
-            headers,
-            body: JSON.stringify(myBody)
-        }).then(response => {
+        console.log("fetching " + url)
+        let options = { method }
+        if(headers){
+            options = { ...options, headers }
+        }
+        if(myBody){
+            options = { ...options, body: JSON.stringify(myBody) }
+        }
+
+        return fetch(url, options).then(response => {
             if (response.ok) {
                 return response.json();
             } else {
@@ -16,12 +21,12 @@ export default class HTTPClient {
         })
         .catch(error => {
             console.error(error.message);
-            return "";
+            return null;
         });
     }
 
     fetchGet(url){
-        return this.fetchComplete(url, "GET", undefined, undefined);
+        return this.fetchComplete(url, "GET", null, null);
     }
 
     fetchPut(url, myHeaders, myBody){

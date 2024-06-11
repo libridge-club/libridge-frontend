@@ -2,7 +2,7 @@ import './DoubleDummyTable.css'
 export default function DoubleDummyTable({ values, onHandleDrawHand }) {
     const directions = ["NORTH","SOUTH","EAST","WEST"]
     const strains = ["CLUBS","DIAMONDS","HEARTS","SPADES","NOTRUMPS"]
-    if(values===undefined || values===null || values["NORTH"]==null){
+    if(!values || !values["NORTH"]){
         return (
             <div className="DoubleDummyTable">
                 <p>Empty</p>

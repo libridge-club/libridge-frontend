@@ -2,6 +2,7 @@ import { useState } from "react";
 import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
 import HTTPClient from "../../HTTPClient";
+import PtBr from "../../i18n/PtBr";
 
 export default function OpeningTrainer() {
 
@@ -12,13 +13,22 @@ export default function OpeningTrainer() {
     const doNothing = () => {}
     
     const myHttpClient = new HTTPClient();
+    const messages = new PtBr();
 
     async function handlerDrawNewBoard(){
         const randomBoard = await myHttpClient.getRandomBoard();
+        if(!randomBoard){
+            alert(messages.error_failedToConnectToServer());
+            return;  
+        } 
         console.log(randomBoard);
         const boardId = randomBoard["id"]
         setCurrentListOfCards( addKeyToCards(randomBoard["board"]["hands"]["NORTH"]["cards"] ));
         const expectedBidFromServer = await myHttpClient.getExpectedBid(boardId);
+        if(!expectedBidFromServer){
+            alert(messages.error_failedToConnectToServer());
+            return;  
+        } 
         setExpectedBid(expectedBidFromServer["call"]["call"]);
         setResultMessage("");
     }
@@ -55,17 +65,17 @@ export default function OpeningTrainer() {
 
     function submitHandler(bid){
         if(!expectedBid){
-            setResultMessage("Failed to get expected bid from server :(");
+            setResultMessage(messages.error_failedToGetBidFromServer());
         }else if(bid===expectedBid){
-            setResultMessage("Correct!");
+            setResultMessage(messages.correct());
         } else{
-            setResultMessage("The expected bid was " + expectedBid + " but you bid " + bid);
+            setResultMessage(messages.theExpectedBidWas(expectedBid, bid));
         }
     }
 
     return (
         <div className="OpeningTrainer" >
-            <button onClick={handlerDrawNewBoard}>Draw random board</button>
+            <button onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
             {shouldDrawHandAndBiddingBox()}
             {shouldDrawResultMessage()}
     </div>

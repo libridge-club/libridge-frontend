@@ -16,10 +16,11 @@ export default function OpeningTrainer() {
     async function handlerDrawNewBoard(){
         const randomBoard = await myHttpClient.getRandomBoard();
         console.log(randomBoard);
-        const boardId = randomBoard["board"]["id"]
+        const boardId = randomBoard["id"]
         setCurrentListOfCards( addKeyToCards(randomBoard["board"]["hands"]["NORTH"]["cards"] ));
         const expectedBidFromServer = await myHttpClient.getExpectedBid(boardId);
-        setExpectedBid(expectedBidFromServer);
+        setExpectedBid(expectedBidFromServer["call"]["call"]);
+        setResultMessage("");
     }
 
     function addKeyToCards(cards) {

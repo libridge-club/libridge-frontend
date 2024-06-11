@@ -2,8 +2,6 @@ import { useState } from 'react';
 import './BiddingBox.css';
 export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, parentSubmitHandler }) {
 
-    parentSubmitHandler = (text) => alert("Bidding "+ text)
-
     const [clickedLevel, setClickedLevel] = useState("P");
     const [clickedStrain, setClickedStrain] = useState("");
 
@@ -81,7 +79,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         if(levelNumber<firstPossibleLevelNumber){
             firstEnabledIndex = LAST_INDEX + 1;
         } else if(levelNumber===firstPossibleLevelNumber){
-            firstEnabledIndex = strainOrder.findIndex(value => value===firstPossibleStrain) + 1;
+            firstEnabledIndex = strainOrder.findIndex(value => value===firstPossibleStrain);
         }
 
         return strainOrder.map( (strain,index) => {
@@ -127,15 +125,29 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         }
     }
 
+    function isPassOrPenalty(bid){
+        return clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX";
+    }
+
     const submitHandler = (event) => {
         event.preventDefault();
-        if(clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX"){
+        if(isPassOrPenalty(clickedLevel)){
             parentSubmitHandler(clickedLevel);
+        } else if(clickedStrain===""){
+            parentSubmitHandler("P");
         } else {
             parentSubmitHandler(clickedLevel+clickedStrain);
         }
     }
-    const submitButton = <button className='submitBid' onClick={submitHandler}>Bid!</button>
+
+    function drawSubmitButton(){
+        const isDisabled = !isPassOrPenalty(clickedLevel) && !clickedStrain
+        return <button
+            className='submitBid'
+            onClick={submitHandler}
+            disabled={isDisabled}
+            >Bid!</button>
+    }
 
 
     return (
@@ -143,7 +155,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
             <p>Bidding box</p>
             <div className='biddingBox_firstRow'> {passButton} {numberButtons}</div>
             <div className='biddingBox_secondRow'> {penaltyButton()} {getStrainItems(clickedLevel)}</div>
-            {submitButton}
+            {drawSubmitButton()}
         </div>
     );
 

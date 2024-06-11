@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import BiddingBox from './components/BiddingBox/BiddingBox';
 import Client from './components/Client/Client';
+import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
+import Board from './components/Board/Board';
 
 const router = createBrowserRouter([
   {
@@ -14,8 +16,12 @@ const router = createBrowserRouter([
     element: <Client />,
   },
   {
-    path: "/biddingBox",
-    element: <BiddingBox firstPossibleBid="3D" mayDouble="false" mayRedouble="true" />,
+    path: "/openingTrainer",
+    element: <OpeningTrainer />,
+  },
+  {
+    path: "/randomBoard",
+    element: <Board />,
   },
 ]);
 

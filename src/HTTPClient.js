@@ -8,17 +8,15 @@ export default class HTTPClient {
             headers,
             body: JSON.stringify(myBody)
         }).then(response => {
-            // console.log("Success:");
-            // console.log(response);
-            return response.json();
-        })
-        .then(data => {
-            // console.log('Fetched data:', data);
-            return data;
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Status code: " + response.status + "\nStatus text: " + response.statusText);
+            }
         })
         .catch(error => {
-            console.error('ERROR!');
-            return console.error(error);
+            console.error(error.message);
+            return "";
         });
     }
 
@@ -30,66 +28,37 @@ export default class HTTPClient {
         return this.fetchComplete(url, "PUT", myHeaders, myBody);
     }
 
-    getTablesFromServerPromise() {
+    async getTables() {
         const API_ENDPOINT="tables"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }
 
-    async getTables() {
-        return this.getTablesFromServerPromise()
-            .then(tableList => tableList)
-            .catch(error => {
-                console.error('ERROR!');
-                return console.error(error);
-            });
-    }
-
-    connectToServerPromise() {
+    async connect() {
         const CONNECT_ENDPOINT="connect"
         const CONNECT_URL = HTTPClient.SERVER_URL + CONNECT_ENDPOINT 
         return this.fetchGet(CONNECT_URL);
     }
 
-    async connect() {
-        return this.connectToServerPromise()
-            .then(playerId => playerId)
-            .catch(error => {
-                console.error('ERROR!');
-                return console.error(error);
-            });
-    }
 
-    putNicknamePromise(playerId, nickname) {
+    async putNickname(playerId, nickname) {
         const CONNECT_ENDPOINT="player/nickname"
         const CONNECT_URL = HTTPClient.SERVER_URL + CONNECT_ENDPOINT
         const myHeaders = {"PlayerUUID": playerId, "Content-Type": "application/json"};
         const myBody = {"content": nickname};
         return this.fetchPut(CONNECT_URL, myHeaders, myBody)
     }
-
-    async putNickname(playerId, nickname){
-        return this.putNicknamePromise(playerId, nickname)
-            .then(playerInfo => playerInfo)
-            .catch(error => {
-                console.error('ERROR!');
-                return console.error(error);
-            });
-    }
     
-    getRandomBoardFromServerPromise() {
+    async getRandomBoard() {
         const API_ENDPOINT="boards/getRandom"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }
 
-    async getRandomBoard() {
-        return this.getRandomBoardFromServerPromise()
-            .then(randomBoard => randomBoard)
-            .catch(error => {
-                console.error('ERROR!');
-                return console.error(error);
-            });
+    async getExpectedBid(boardId) {
+        const API_ENDPOINT="openingTrainer/" + boardId + "/NORTH"
+        const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
+        return this.fetchGet(FULL_URL);
     }
 
 }

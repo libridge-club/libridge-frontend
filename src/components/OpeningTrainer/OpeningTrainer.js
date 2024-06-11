@@ -3,7 +3,7 @@ import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
 import HTTPClient from "../../HTTPClient";
 
-export default function OpeningTrainer({  }) {
+export default function OpeningTrainer() {
 
     const [currentListOfCards, setCurrentListOfCards] = useState([]);
     const [expectedBid, setExpectedBid] = useState("");

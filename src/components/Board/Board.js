@@ -1,5 +1,5 @@
 import './Board.css';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DoubleDummyTable from "../DoubleDummyTable/DoubleDummyTable";
 import Hand from "../Hand/Hand";
 import HTTPClient from '../../HTTPClient';

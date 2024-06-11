@@ -5,7 +5,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import BiddingBox from './components/BiddingBox/BiddingBox';
 import Client from './components/Client/Client';
 import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
 import Board from './components/Board/Board';

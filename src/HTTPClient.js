@@ -60,8 +60,8 @@ export default class HTTPClient {
         return this.fetchGet(FULL_URL);
     }
 
-    async getExpectedBid(boardId) {
-        const API_ENDPOINT="openingTrainer/" + boardId + "/NORTH"
+    async getRandomHandWithCall() {
+        const API_ENDPOINT="openingTrainer/getRandom"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }

@@ -6,8 +6,8 @@ import PtBr from "../../i18n/PtBr";
 
 export default function OpeningTrainer() {
 
-    const [currentListOfCards, setCurrentListOfCards] = useState([]);
-    const [expectedBid, setExpectedBid] = useState("");
+    const [handInPbnStringFormat, setHandInPbnStringFormat] = useState("");
+    const [expectedCall, setExpectedCall] = useState("");
     const [resultMessage, setResultMessage] = useState("");
     
     const doNothing = () => {}
@@ -16,41 +16,21 @@ export default function OpeningTrainer() {
     const messages = new PtBr();
 
     async function handlerDrawNewBoard(){
-        const randomBoard = await myHttpClient.getRandomBoard();
-        if(!randomBoard){
-            alert(messages.error_failedToConnectToServer());
-            return;  
-        } 
-        console.log(randomBoard);
-        const boardId = randomBoard["id"]
-        setCurrentListOfCards( addKeyToCards(randomBoard["board"]["hands"]["NORTH"]["cards"] ));
-        const expectedBidFromServer = await myHttpClient.getExpectedBid(boardId);
-        if(!expectedBidFromServer){
-            alert(messages.error_failedToConnectToServer());
-            return;  
-        } 
-        setExpectedBid(expectedBidFromServer["call"]["call"]);
         setResultMessage("");
-    }
-
-    function addKeyToCards(cards) {
-        return cards.map(card => {
-            return {
-                ...card,
-                "key": getCardUniqueKey(card)
-            }
-        })
-    }
-    
-    function getCardUniqueKey({ suit, rank }) {
-        return suit + rank;
+        const randomHandWithCall = await myHttpClient.getRandomHandWithCall();
+        if(!randomHandWithCall){
+            alert(messages.error_failedToConnectToServer());
+            return;  
+        }
+        setHandInPbnStringFormat(randomHandWithCall["hand"]);
+        setExpectedCall(randomHandWithCall["call"]);
     }
 
     function shouldDrawHandAndBiddingBox(){
-        if ((!Array.isArray(currentListOfCards) || !currentListOfCards.length)){
+        if (!handInPbnStringFormat){
             return <></>
         } else {
-            return <><Hand cards={currentListOfCards} onClick={doNothing} id="OpeningTrainerHand" />
+            return <><Hand pbnNotationHand={handInPbnStringFormat} onClick={doNothing} id="OpeningTrainerHand" />
                     <BiddingBox firstPossibleBid="1C" mayDouble="false" mayRedouble="false" parentSubmitHandler={submitHandler}/></>
         }
     }
@@ -64,12 +44,12 @@ export default function OpeningTrainer() {
     }
 
     function submitHandler(bid){
-        if(!expectedBid){
+        if(!expectedCall){
             setResultMessage(messages.error_failedToGetBidFromServer());
-        }else if(bid===expectedBid){
+        }else if(bid===expectedCall){
             setResultMessage(messages.correct());
         } else{
-            setResultMessage(messages.theExpectedBidWas(expectedBid, bid));
+            setResultMessage(messages.theExpectedBidWas(expectedCall, bid));
         }
     }
 

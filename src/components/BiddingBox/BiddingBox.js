@@ -20,8 +20,6 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
 
     const messages = new PtBr();
 
-    
-
     function handleLevelClick(level) {
         if(level>=firstPossibleLevelNumber){
             setClickedLevel(level);

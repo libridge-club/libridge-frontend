@@ -18,6 +18,7 @@ export default function OpeningTrainer() {
 
     async function handlerDrawNewBoard(){
         setResultMessage("");
+        setHandInPbnStringFormat("");
         const randomHandWithCall = await myHttpClient.getRandomHandWithCall();
         if(!randomHandWithCall){
             alert(messages.error_failedToConnectToServer());

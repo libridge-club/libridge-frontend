@@ -1,0 +1,18 @@
+div .OpeningTrainer_drawNewBoardButton {
+    margin: 10px;
+}
+
+div .OpeningTrainer_Hand {
+    margin: 10px;
+    text-align: left
+}
+
+#OpeningTrainerHand {
+    text-align: left
+}
+
+div .OpeningTrainer_resultMessage {
+    margin: 10px;
+    text-align: left
+}
+

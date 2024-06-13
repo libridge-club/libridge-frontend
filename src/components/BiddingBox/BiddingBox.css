@@ -2,11 +2,13 @@ div .BiddingBox {
     border-style: solid;
     border: 1px solid black;
     width: 300px;
+    margin: 10px;
 }
 
 div .biddingBox_rows{
     display:grid;
     grid-template-rows: 3;
+    margin: 10px;
 }
 
 div .biddingBox_firstRow{

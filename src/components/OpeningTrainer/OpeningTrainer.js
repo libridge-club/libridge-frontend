@@ -1,3 +1,4 @@
+import './OpeningTrainer.css';
 import { useState } from "react";
 import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
@@ -26,20 +27,15 @@ export default function OpeningTrainer() {
         setExpectedCall(randomHandWithCall["call"]);
     }
 
-    function shouldDrawHandAndBiddingBox(){
-        if (!handInPbnStringFormat){
-            return <></>
-        } else {
-            return <><Hand pbnNotationHand={handInPbnStringFormat} onClick={doNothing} id="OpeningTrainerHand" />
-                    <BiddingBox firstPossibleBid="1C" mayDouble="false" mayRedouble="false" parentSubmitHandler={submitHandler}/></>
+    function shouldDrawHand(){
+        if (handInPbnStringFormat){
+            return <Hand pbnNotationHand={handInPbnStringFormat} onClick={doNothing} id="OpeningTrainerHand" />
         }
     }
 
-    function shouldDrawResultMessage(){
-        if (!resultMessage){
-            return <></>
-        } else {
-            return <p>{resultMessage}</p>
+    function shouldDrawBiddingBox(){
+        if (handInPbnStringFormat){
+            return <BiddingBox firstPossibleBid="1C" mayDouble="false" mayRedouble="false" parentSubmitHandler={submitHandler}/>
         }
     }
 
@@ -53,11 +49,24 @@ export default function OpeningTrainer() {
         }
     }
 
+    function shouldDrawResultMessage(){
+        if (resultMessage){
+            return <p>{resultMessage}</p>
+        }
+    }
+
     return (
         <div className="OpeningTrainer" >
-            <button onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
-            {shouldDrawHandAndBiddingBox()}
-            {shouldDrawResultMessage()}
+            <button className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
+            <div className='OpeningTrainer_Hand'>
+                {shouldDrawHand()}
+            </div>
+            <div className='OpeningTrainer_BiddingBox'>
+                {shouldDrawBiddingBox()}
+            </div>
+            <div className='OpeningTrainer_resultMessage'>
+                {shouldDrawResultMessage()}
+            </div>
     </div>
     );
 }

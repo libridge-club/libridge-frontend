@@ -159,7 +159,6 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
 
     return (
         <div className="BiddingBox">
-            <p>Bidding box</p>
             <div className='biddingBox_rows'>
                 <div className='biddingBox_firstRow'>{passButton} {numberButtons}</div>
                 <div className='biddingBox_secondRow'>{penaltyButton()} {getStrainItems(clickedLevel)}</div>

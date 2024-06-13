@@ -1,4 +1,5 @@
 export default class En {
+    bid = () => "Bid!";
     correct = () => "Correct!";
     drawRandomHand = () => "Draw random hand";
     error_failedToConnectToServer = () => "Failed to connect to server :("

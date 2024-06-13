@@ -1,14 +1,26 @@
 import { useState } from 'react';
 import './BiddingBox.css';
+import PtBr from '../../i18n/PtBr';
 export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, parentSubmitHandler }) {
 
     const [clickedLevel, setClickedLevel] = useState("P");
-    const [clickedStrain, setClickedStrain] = useState("");
+    const [clickedStrain, setClickedStrain] = useState(null);
 
-    const strainOrder = ["C","D","H","S","N"];
+    const Strain = {
+        CLUBS: { "name":"Clubs", "letter":"C", "symbol":'\u2663', "color":"black" },
+        DIAMONDS: { "name":"Diamonds", "letter":"D", "symbol":'\u2666', "color":"red" },
+        HEARTS: { "name":"Hearts", "letter":"H", "symbol":'\u2665', "color":"red" },
+        SPADES: { "name":"Spades", "letter":"S", "symbol":'\u2660', "color":"black" },
+        NOTRUMPS: { "name":"No Trumps", "letter":"N", "symbol":'NT', "color":"black" }
+    };
+    const strainOrder = [Strain.CLUBS, Strain.DIAMONDS, Strain.HEARTS, Strain.SPADES, Strain.NOTRUMPS];
     const levels = ["1", "2", "3", "4", "5", "6", "7"];
     const firstPossibleLevelNumber = parseInt (firstPossibleBid);
-    const firstPossibleStrain = firstPossibleBid[1];
+    const firstPossibleStrain = Object.entries(Strain).map(([key,value]) => value).find(value => value.letter===firstPossibleBid[1]) || null;
+
+    const messages = new PtBr();
+
+    
 
     function handleLevelClick(level) {
         if(level>=firstPossibleLevelNumber){
@@ -21,7 +33,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         else {
             setClickedLevel("P");
         }
-        setClickedStrain("")
+        setClickedStrain(null)
     }
     const handleLevelPass = () => {
         handleLevelClick("P");
@@ -38,14 +50,9 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
 
     function handleStrainClick(strain) {
         if(!strain || clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX"){
-            return;
-        }
-        const upperCaseStrain = strain.toString().toUpperCase();
-        const strainIndex = strainOrder.findIndex(value => value===upperCaseStrain)
-        if(strainIndex < 0){
             handleLevelPass()
         } else {
-            setClickedStrain(upperCaseStrain);
+            setClickedStrain(strain);
         }
     }
     function handleStrainClickRedirection(strain){
@@ -55,7 +62,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
     
     const numberButtons = levels.map(level => {
         const levelNumber = parseInt (level);
-        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && firstPossibleStrain==="N");
+        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && firstPossibleStrain===Strain.NOTRUMPS);
         return (<button
             className='biddingBox_numberButton'
             id={"NumberButton_"+level}
@@ -79,19 +86,19 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         if(levelNumber<firstPossibleLevelNumber){
             firstEnabledIndex = LAST_INDEX + 1;
         } else if(levelNumber===firstPossibleLevelNumber){
-            firstEnabledIndex = strainOrder.findIndex(value => value===firstPossibleStrain);
+            firstEnabledIndex = strainOrder.findIndex(value => value.letter===firstPossibleStrain.letter);
         }
 
         return strainOrder.map( (strain,index) => {
             const isDisabled = index < firstEnabledIndex;
             return (<button
                 className='strainButton'
-                id={"strainButton_"+strain}
+                id={"strainButton_"+strain.letter}
                 disabled={isDisabled}
-                key={strain}
+                key={strain.letter}
                 onClick={isDisabled ? null : handleStrainClickRedirection(strain)}
-                selectedstrain={clickedStrain===strain? "true" : "false"}
-                >{strain}</button>)
+                selectedstrain={(clickedStrain && clickedStrain.letter===strain.letter)? "true" : "false"}
+                >{strain.symbol}</button>)
         })
     }
 
@@ -121,7 +128,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         } else if(mayRedoubleBoolean){
             return redoubleButton;
         } else {
-            return <></>;
+            return <p />; // FIXME This is to avoid the empty row collapsing. There should be a better way to handle this in css.
         }
     }
 
@@ -133,29 +140,31 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         event.preventDefault();
         if(isPassOrPenalty(clickedLevel)){
             parentSubmitHandler(clickedLevel);
-        } else if(clickedStrain===""){
+        } else if(!clickedStrain){
             parentSubmitHandler("P");
         } else {
-            parentSubmitHandler(clickedLevel+clickedStrain);
+            parentSubmitHandler(clickedLevel+clickedStrain.letter);
         }
     }
 
     function drawSubmitButton(){
         const isDisabled = !isPassOrPenalty(clickedLevel) && !clickedStrain
         return <button
-            className='submitBid'
+            className='biddingBox_bidButton'
             onClick={submitHandler}
             disabled={isDisabled}
-            >Bid!</button>
+            >{messages.bid()}</button>
     }
 
 
     return (
         <div className="BiddingBox">
             <p>Bidding box</p>
-            <div className='biddingBox_firstRow'> {passButton} {numberButtons}</div>
-            <div className='biddingBox_secondRow'> {penaltyButton()} {getStrainItems(clickedLevel)}</div>
-            {drawSubmitButton()}
+            <div className='biddingBox_rows'>
+                <div className='biddingBox_firstRow'>{passButton} {numberButtons}</div>
+                <div className='biddingBox_secondRow'>{penaltyButton()} {getStrainItems(clickedLevel)}</div>
+                <div className='biddingBox_thirdRow'>{drawSubmitButton()}</div>
+            </div>
         </div>
     );
 

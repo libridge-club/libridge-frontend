@@ -4,6 +4,7 @@ import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
 import HTTPClient from "../../HTTPClient";
 import PtBr from "../../i18n/PtBr";
+import Strain from '../../Strain';
 
 export default function OpeningTrainer() {
 
@@ -46,27 +47,38 @@ export default function OpeningTrainer() {
         }else if(bid===expectedCall){
             setResultMessage(messages.correct());
         } else{
-            setResultMessage(messages.theExpectedBidWas(expectedCall, bid));
+            const formatedExpectedCall = formatBid(expectedCall);
+            const formattedBid = formatBid(bid);
+            setResultMessage(messages.theExpectedBidWas(formatedExpectedCall, formattedBid));
         }
     }
 
-    function shouldDrawResultMessage(){
-        if (resultMessage){
-            return <p>{resultMessage}</p>
+    function formatBid(bid){
+        console.log("Formatting bid:" + bid)
+        if(bid==="P"){
+            return "PASS";
         }
+        if(bid==="X" || bid==="XX"){
+            return bid;
+        }
+        const level = bid[0];
+        const strainLetter = bid[1];
+        const foundStrain = Strain.findByLetter(strainLetter)
+        if(!foundStrain) return ""
+        return level + foundStrain.symbol
     }
 
     return (
         <div className="OpeningTrainer" >
-            <button className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
             <div className='OpeningTrainer_Hand'>
                 {shouldDrawHand()}
             </div>
             <div className='OpeningTrainer_BiddingBox'>
                 {shouldDrawBiddingBox()}
             </div>
+            <button className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
             <div className='OpeningTrainer_resultMessage'>
-                {shouldDrawResultMessage()}
+                <p>{resultMessage}</p>
             </div>
     </div>
     );

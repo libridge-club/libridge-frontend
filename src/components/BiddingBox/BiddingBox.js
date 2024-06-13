@@ -1,22 +1,16 @@
 import { useState } from 'react';
 import './BiddingBox.css';
 import PtBr from '../../i18n/PtBr';
+import Strain from '../../Strain';
 export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, parentSubmitHandler }) {
 
     const [clickedLevel, setClickedLevel] = useState("P");
     const [clickedStrain, setClickedStrain] = useState(null);
 
-    const Strain = {
-        CLUBS: { "name":"Clubs", "letter":"C", "symbol":'\u2663', "color":"black" },
-        DIAMONDS: { "name":"Diamonds", "letter":"D", "symbol":'\u2666', "color":"red" },
-        HEARTS: { "name":"Hearts", "letter":"H", "symbol":'\u2665', "color":"red" },
-        SPADES: { "name":"Spades", "letter":"S", "symbol":'\u2660', "color":"black" },
-        NOTRUMPS: { "name":"No Trumps", "letter":"N", "symbol":'NT', "color":"black" }
-    };
     const strainOrder = [Strain.CLUBS, Strain.DIAMONDS, Strain.HEARTS, Strain.SPADES, Strain.NOTRUMPS];
     const levels = ["1", "2", "3", "4", "5", "6", "7"];
     const firstPossibleLevelNumber = parseInt (firstPossibleBid);
-    const firstPossibleStrain = Object.entries(Strain).map(([key,value]) => value).find(value => value.letter===firstPossibleBid[1]) || null;
+    const firstPossibleStrain = Strain.findByLetter(firstPossibleBid[1]);
 
     const messages = new PtBr();
 
@@ -60,7 +54,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
     
     const numberButtons = levels.map(level => {
         const levelNumber = parseInt (level);
-        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && firstPossibleStrain===Strain.NOTRUMPS);
+        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && Strain.NOTRUMPS.equals(firstPossibleStrain));
         return (<button
             className='biddingBox_numberButton'
             id={"NumberButton_"+level}
@@ -84,7 +78,7 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         if(levelNumber<firstPossibleLevelNumber){
             firstEnabledIndex = LAST_INDEX + 1;
         } else if(levelNumber===firstPossibleLevelNumber){
-            firstEnabledIndex = strainOrder.findIndex(value => value.letter===firstPossibleStrain.letter);
+            firstEnabledIndex = strainOrder.findIndex(value => value.equals(firstPossibleStrain));
         }
 
         return strainOrder.map( (strain,index) => {

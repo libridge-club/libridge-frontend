@@ -11,6 +11,7 @@ export default function OpeningTrainer() {
     const [handInPbnStringFormat, setHandInPbnStringFormat] = useState("");
     const [expectedCall, setExpectedCall] = useState("");
     const [resultMessage, setResultMessage] = useState("");
+    const [candidates, setCandidates] = useState([]);
     
     const doNothing = () => {}
     
@@ -27,6 +28,7 @@ export default function OpeningTrainer() {
         }
         setHandInPbnStringFormat(randomHandWithCall["hand"]);
         setExpectedCall(randomHandWithCall["call"]);
+        setCandidates(randomHandWithCall["candidates"])
     }
 
     function shouldDrawHand(){
@@ -68,6 +70,38 @@ export default function OpeningTrainer() {
         return level + foundStrain.symbol
     }
 
+    function drawCandidates(){
+        const benDescription = (
+            <div className='OpeningTrainer_benDescription'>
+                <a href="https://lorserker.github.io/ben/" target="_blank" rel="noopener noreferrer">{messages.whoIsBen()}</a>
+                <span> {messages.benDescription()}</span>
+            </div>
+        )
+        if(candidates.length===0 || !resultMessage){
+            return <></>
+        } else if (candidates.length===1 && candidates[0]["call"]===expectedCall) {
+            return <></>
+        } else if (candidates.length===1) {
+            return (
+                <div className='OpeningTrainer_benCandidates'>
+                    <p>Mas o ben discorda. Pra ele, o lance indicado é {formatBid(candidates[0]["call"])}.</p>
+                    {benDescription}
+                </div>
+            )
+        }
+        else {
+            const sortedCandidates = candidates.sort((a,b)=>b["probability"]-a["probability"]);
+            const candidatesRender = sortedCandidates.map(candidate => <p>{"Lance: " + formatBid(candidate["call"]) + " com probabilidade " + candidate["probability"]*100 + "%"}</p>);
+            return (
+                <div className='OpeningTrainer_benCandidates'>
+                    <p>Para essa mão, o ben oferece mais de um lance candidato. Eles são:</p>
+                    {candidatesRender}
+                    {benDescription}
+                </div>
+            )
+        }
+    }
+
     return (
         <div className="OpeningTrainer" >
             <div className='OpeningTrainer_Hand'>
@@ -79,6 +113,7 @@ export default function OpeningTrainer() {
             <button className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
             <div className='OpeningTrainer_resultMessage'>
                 <p>{resultMessage}</p>
+                {drawCandidates()}
             </div>
     </div>
     );

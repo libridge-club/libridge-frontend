@@ -108,6 +108,7 @@ export default function OpeningTrainer() {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>libridge.club</title>
+                <meta name="description" content="libridge.club - Free online Bridge" />
             </Helmet>
             <div className='OpeningTrainer_Hand'>
                 {shouldDrawHand()}

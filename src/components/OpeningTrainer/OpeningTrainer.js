@@ -5,6 +5,7 @@ import Hand from "../Hand/Hand";
 import HTTPClient from "../../HTTPClient";
 import PtBr from "../../i18n/PtBr";
 import Strain from '../../Strain';
+import { Helmet } from 'react-helmet';
 
 export default function OpeningTrainer() {
 
@@ -104,6 +105,10 @@ export default function OpeningTrainer() {
 
     return (
         <div className="OpeningTrainer" >
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>libridge.club</title>
+            </Helmet>
             <div className='OpeningTrainer_Hand'>
                 {shouldDrawHand()}
             </div>

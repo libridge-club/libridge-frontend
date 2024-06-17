@@ -53,8 +53,8 @@ const symbolToRankMap = new Map<string, Rank>([
     ['K', Rank.KING],
     ['A', Rank.ACE],
 ]);
-export function getRankFromSymbol(symbol:string):Rank|undefined {
-    return symbolToRankMap.get(symbol);
+export function getRankFromSymbol(symbol:string):Rank|null {
+    return symbolToRankMap.get(symbol) ?? null;
 }
 export function getRankFromSymbolNonNull(symbol:string):Rank {
     return getRankFromSymbol(symbol) ?? Rank.TWO;

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Helmet } from 'react-helmet';
 import HTTPClient from "../../HTTPClient";
-import Strain from '../../Strain';
 import PtBr from "../../i18n/PtBr";
 import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
 import SampleTypescriptButton from '../SampleTypescriptButton/SampleTypescriptButton';
 import './OpeningTrainer.css';
+import { getStrainFromLetter, getSymbolFromStrain } from "../../model/helper/StrainHelper";
 
 export default function OpeningTrainer() {
 
@@ -67,9 +67,9 @@ export default function OpeningTrainer() {
         }
         const level = bid[0];
         const strainLetter = bid[1];
-        const foundStrain = Strain.findByLetter(strainLetter)
-        if(!foundStrain) return ""
-        return level + foundStrain.symbol
+        const foundStrain = getStrainFromLetter(strainLetter);
+        if(foundStrain==null) return ""
+        return level + getSymbolFromStrain(foundStrain);
     }
 
     function drawCandidates(){

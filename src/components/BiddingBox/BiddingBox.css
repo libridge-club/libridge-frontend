@@ -85,10 +85,10 @@ div .biddingBox_thirdRow{
     grid-row: 1 / 2;
 }
 
-button[selectedlevel="true"] {
+button[data-selectedlevel="true"] {
     border: 3px solid green;
 }
 
-button[selectedstrain="true"] {
+button[data-selectedstrain="true"] {
     border: 3px solid green;
 }

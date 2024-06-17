@@ -1,5 +1,9 @@
-.cardButton {
+button.cardButton {
     margin: 0;
     border: 0;
     padding: 0;
+}
+
+img.cardImage {
+    height: 200px;
 }

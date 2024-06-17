@@ -1,25 +1,37 @@
-import { useState } from 'react';
-import './BiddingBox.css';
+import { FormEvent, useState } from 'react';
 import PtBr from '../../i18n/PtBr';
-import Strain from '../../Strain';
-export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, parentSubmitHandler }) {
+import Strain from '../../model/enums/Strain';
+import { getLetterFromStrain, getStrainFromLetter, getStrainOrder, getSymbolFromStrain } from '../../model/helper/StrainHelper';
+import './BiddingBox.css';
 
-    const [clickedLevel, setClickedLevel] = useState("P");
-    const [clickedStrain, setClickedStrain] = useState(null);
+type Props = {
+    firstPossibleBid:string,
+    mayDouble:string,
+    mayRedouble:string,
+    parentSubmitHandler: (a: string) => void
+}
 
-    const strainOrder = [Strain.CLUBS, Strain.DIAMONDS, Strain.HEARTS, Strain.SPADES, Strain.NOTRUMPS];
+const doNothing = () => {}
+
+export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, parentSubmitHandler }:Props) {
+
+    const [clickedLevel, setClickedLevel] = useState<string>("P");
+    const [clickedStrain, setClickedStrain] = useState<Strain|null>(null);
+
+    const strainOrder = getStrainOrder();
     const levels = ["1", "2", "3", "4", "5", "6", "7"];
     const firstPossibleLevelNumber = parseInt (firstPossibleBid);
-    const firstPossibleStrain = Strain.findByLetter(firstPossibleBid[1]);
+    const firstPossibleStrain = getStrainFromLetter(firstPossibleBid[1]);
 
     const messages = new PtBr();
 
-    function handleLevelClick(level) {
+    function handleLevelClick(levelParam:string) {
+        const level = parseInt(levelParam);
         if(level>=firstPossibleLevelNumber){
-            setClickedLevel(level);
-        } else if(level==="X"){
+            setClickedLevel(levelParam);
+        } else if(levelParam==="X"){
             setClickedLevel("X");
-        } else if(level==="XX"){
+        } else if(levelParam==="XX"){
             setClickedLevel("XX");
         }
         else {
@@ -36,41 +48,42 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
     const handleLevelRedouble = () => {
         handleLevelClick("XX");
     }
-    function handleLevelNumber(number){
+    function handleLevelClickRedirection(number:string){
         return () => handleLevelClick(number);
     }
 
-    function handleStrainClick(strain) {
-        if(!strain || clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX"){
+    function handleStrainClick(strain:Strain) {
+        if(clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX"){
             handleLevelPass()
         } else {
             setClickedStrain(strain);
         }
     }
-    function handleStrainClickRedirection(strain){
+    function handleStrainClickRedirection(strain:Strain){
         return () => handleStrainClick(strain);
     }
 
     
     const numberButtons = levels.map(level => {
         const levelNumber = parseInt (level);
-        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && Strain.NOTRUMPS.equals(firstPossibleStrain));
+        const isDisabled = (levelNumber < firstPossibleLevelNumber) || (levelNumber === firstPossibleLevelNumber && Strain.NOTRUMPS===firstPossibleStrain);
+        const selectedLevel = clickedLevel===level? "true" : "false";
         return (<button
             className='biddingBox_numberButton'
             id={"NumberButton_"+level}
             disabled={isDisabled}
-            onClick={isDisabled ? null : handleLevelNumber(level)}
+            onClick={isDisabled ? doNothing : handleLevelClickRedirection(level)}
             key={level}
-            selectedlevel={clickedLevel===level? "true" : "false"}
+            data-selectedlevel={selectedLevel}
             >{level}</button>)
     });
 
-    function getStrainItems(level) {
+    function getStrainItems(level:string) {
         if(level===null || level==="" || level==="P" || level==="X" || level==="XX"){
             return <></>;
         }
         const levelNumber = parseInt (level);
-        if(level===0 || isNaN(level)){
+        if(levelNumber===0 || isNaN(levelNumber)){
             return <></>;
         }
         let firstEnabledIndex = 0;
@@ -78,38 +91,39 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         if(levelNumber<firstPossibleLevelNumber){
             firstEnabledIndex = LAST_INDEX + 1;
         } else if(levelNumber===firstPossibleLevelNumber){
-            firstEnabledIndex = strainOrder.findIndex(value => value.equals(firstPossibleStrain));
+            firstEnabledIndex = strainOrder.findIndex(value => value===firstPossibleStrain);
         }
 
         return strainOrder.map( (strain,index) => {
             const isDisabled = index < firstEnabledIndex;
+            const strainLetter = getLetterFromStrain(strain);
             return (<button
                 className='strainButton'
-                id={"strainButton_"+strain.letter}
+                id={"strainButton_"+strainLetter}
                 disabled={isDisabled}
-                key={strain.letter}
-                onClick={isDisabled ? null : handleStrainClickRedirection(strain)}
-                selectedstrain={(clickedStrain && clickedStrain.letter===strain.letter)? "true" : "false"}
-                >{strain.symbol}</button>)
+                key={strainLetter}
+                onClick={isDisabled ? doNothing : handleStrainClickRedirection(strain)}
+                data-selectedstrain={(clickedStrain===strain)? "true" : "false"}
+                >{getSymbolFromStrain(strain)}</button>)
         })
     }
 
     const passButton = <button
         className='biddingBox_passButton'
         key="pass"
-        selectedlevel={clickedLevel==="P"? "true" : "false"}
+        data-selectedlevel={clickedLevel==="P"? "true" : "false"}
         onClick={handleLevelPass}
         >PASS</button>
     const doubleButton = <button
         className='biddingBox_doubleButton'
         key="double"
-        selectedlevel={clickedLevel==="X"? "true" : "false"}
+        data-selectedlevel={clickedLevel==="X"? "true" : "false"}
         onClick={handleLevelDouble}
         >X</button>
     const redoubleButton = <button
         className='biddingBox_redoubleButton'
         key="redouble"
-        selectedlevel={clickedLevel==="XX"? "true" : "false"}
+        data-selectedlevel={clickedLevel==="XX"? "true" : "false"}
         onClick={handleLevelRedouble}
         >XX</button>
     const penaltyButton = () => {
@@ -124,23 +138,23 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         }
     }
 
-    function isPassOrPenalty(bid){
+    function isPassOrPenalty(){
         return clickedLevel==="P" || clickedLevel==="X" || clickedLevel==="XX";
     }
 
-    const submitHandler = (event) => {
+    const submitHandler = (event:FormEvent) => {
         event.preventDefault();
-        if(isPassOrPenalty(clickedLevel)){
+        if(isPassOrPenalty()){
             parentSubmitHandler(clickedLevel);
-        } else if(!clickedStrain){
+        } else if(clickedStrain==null){
             parentSubmitHandler("P");
         } else {
-            parentSubmitHandler(clickedLevel+clickedStrain.letter);
+            parentSubmitHandler(clickedLevel+getLetterFromStrain(clickedStrain));
         }
     }
 
     function drawSubmitButton(){
-        const isDisabled = !isPassOrPenalty(clickedLevel) && !clickedStrain
+        const isDisabled = !isPassOrPenalty() && clickedStrain==null
         return <button
             className='biddingBox_bidButton'
             onClick={submitHandler}

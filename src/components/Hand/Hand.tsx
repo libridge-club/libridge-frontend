@@ -14,14 +14,20 @@ type Props = {
 
 export default function Hand({ pbnNotationHand, onClick, id }: Props) {
 
+    const pbnSuitOrder = [Suit.SPADES, Suit.HEARTS, Suit.DIAMONDS, Suit.CLUBS]
+    const drawHandSuitOrder = [Suit.SPADES, Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS]
+
     function getCardsFromPbnNotation(pbnString:string):Card[]{
-        if(!pbnString) return [];
         const suitSeparated = pbnString.split(".")
-        const spadeCards = suitSeparated[0].split("").map( card => { return { "suit":Suit.SPADES, "rank":getRankFromSymbolNonNull(card) } } )
-        const heartCards = suitSeparated[1].split("").map( card => { return { "suit":Suit.HEARTS, "rank":getRankFromSymbolNonNull(card) } } )
-        const diamondCards = suitSeparated[2].split("").map( card => { return { "suit":Suit.DIAMONDS, "rank":getRankFromSymbolNonNull(card) } } )
-        const clubCards = suitSeparated[3].split("").map( card => { return { "suit":Suit.CLUBS, "rank":getRankFromSymbolNonNull(card) } } )
-        return spadeCards.concat(heartCards, clubCards, diamondCards);
+        const cardsSeparatedInSuits = new Map<Suit, Card[] >();
+        pbnSuitOrder.forEach((suit,index) => {
+            const cardsForASuit = suitSeparated[index].split("").map( rankSymbol => { return { "suit":suit, "rank":getRankFromSymbolNonNull(rankSymbol) } } )
+            cardsSeparatedInSuits.set(suit,cardsForASuit)
+        })
+        return drawHandSuitOrder.reduce(
+            (accumulator, currentSuit) => accumulator.concat(cardsSeparatedInSuits.get(currentSuit) || []),
+            [] as Card[]
+          );
     }
 
     const allCards = getCardsFromPbnNotation(pbnNotationHand).map(card => {
@@ -40,4 +46,3 @@ export default function Hand({ pbnNotationHand, onClick, id }: Props) {
         </div>
     );
 }
-

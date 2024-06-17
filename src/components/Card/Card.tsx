@@ -17,10 +17,8 @@ export default function CardComponent({ card, onClick }: Props) {
     const filenameSrc = filenameBase + getFilenameFromRank(rank) + '-of-' + getFilenameFromSuit(suit) + '.svg';
     return (
         <div className="Card" onClick={onClick}>
-            <button className="cardButton">{<img src={filenameSrc} className="cardImage" alt={altText.toLowerCase()} height="200px" />}</button>
+            <button className="cardButton">{<img src={filenameSrc} className="cardImage" alt={altText.toLowerCase()} />}</button>
         </div>
     );
 
 }
-
-

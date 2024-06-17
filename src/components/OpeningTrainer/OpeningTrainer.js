@@ -6,6 +6,7 @@ import HTTPClient from "../../HTTPClient";
 import PtBr from "../../i18n/PtBr";
 import Strain from '../../Strain';
 import { Helmet } from 'react-helmet';
+import SampleTypescriptButton from '../SampleTypescriptButton/SampleTypescriptButton'
 
 export default function OpeningTrainer() {
 
@@ -116,7 +117,7 @@ export default function OpeningTrainer() {
             <div className='OpeningTrainer_BiddingBox'>
                 {shouldDrawBiddingBox()}
             </div>
-            <button className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard}>{messages.drawRandomHand()}</button>
+            <SampleTypescriptButton className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard} text={messages.drawRandomHand()}/>
             <div className='OpeningTrainer_resultMessage'>
                 <p>{resultMessage}</p>
                 {drawCandidates()}

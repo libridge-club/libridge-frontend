@@ -78,7 +78,7 @@ export default function OpeningTrainer() {
                 <span> {messages.benDescription()}</span>
             </div>
         )
-        if(candidates.length===0 || !resultMessage){
+        if(!candidates || candidates.length===0 || !resultMessage){
             return <></>
         } else if (candidates.length===1 && candidates[0]["call"]===expectedCall) {
             return <></>

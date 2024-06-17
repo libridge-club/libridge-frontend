@@ -1,15 +1,17 @@
 import { MouseEventHandler } from 'react';
-import Rank, { getDescriptionTextFromRank, getFilenameFromRank } from '../../enums/Rank';
-import Suit, { getDescriptionTextFromSuit, getFilenameFromSuit } from '../../enums/Suit';
+import Card from '../../model/Card';
+import { getDescriptionTextFromRank, getFilenameFromRank } from '../../model/helper/RankHelper';
+import { getDescriptionTextFromSuit, getFilenameFromSuit } from '../../model/helper/SuitHelper';
 import './Card.css';
 
 type Props = {
-    suit: Suit,
-    rank: Rank,
+    card: Card,
     onClick: MouseEventHandler
-  }
+}
 
-export default function Card({ suit, rank, onClick }: Props) {
+export default function CardComponent({ card, onClick }: Props) {
+    const suit = card.suit;
+    const rank = card.rank;
     const altText = 'card ' + getDescriptionTextFromRank(rank) + ' of ' + getDescriptionTextFromSuit(suit);
     const filenameBase = 'assets/cards/nicubunu-White-deck-';
     const filenameSrc = filenameBase + getFilenameFromRank(rank) + '-of-' + getFilenameFromSuit(suit) + '.svg';

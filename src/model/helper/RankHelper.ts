@@ -1,18 +1,4 @@
-enum Rank {
-    TWO,
-    THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT,
-    NINE,
-    TEN,
-    JACK,
-    QUEEN,
-    KING,
-    ACE,
-}
+import Rank from "../enums/Rank";
 
 const rankToFilenameTextMap = new Map<Rank, string>([
     [Rank.TWO, '2'],
@@ -70,5 +56,25 @@ const symbolToRankMap = new Map<string, Rank>([
 export function getRankFromSymbol(symbol:string):Rank|undefined {
     return symbolToRankMap.get(symbol);
 }
+export function getRankFromSymbolNonNull(symbol:string):Rank {
+    return getRankFromSymbol(symbol) ?? Rank.TWO;
+}
 
-export default Rank
+const rankToSymbolMap = new Map<Rank, string>([
+    [Rank.TWO, '2'],
+    [Rank.THREE, '3'],
+    [Rank.FOUR, '4'],
+    [Rank.FIVE, '5'],
+    [Rank.SIX, '6'],
+    [Rank.SEVEN, '7'],
+    [Rank.EIGHT, '8'],
+    [Rank.NINE, '9'],
+    [Rank.TEN, 'T'],
+    [Rank.JACK, 'J'],
+    [Rank.QUEEN, 'Q'],
+    [Rank.KING, 'K'],
+    [Rank.ACE, 'A'],
+]);
+export function getSymbolFromRank(rank:Rank):string {
+    return rankToSymbolMap.get(rank) ?? "";
+}

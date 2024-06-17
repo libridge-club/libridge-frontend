@@ -1,9 +1,4 @@
-enum Suit {
-    CLUBS,
-    DIAMONDS,
-    HEARTS,
-    SPADES,
-}
+import Suit from "../enums/Suit";
 
 const suitToDescriptionTextMap = new Map<Suit, string>([
     [Suit.CLUBS, 'clubs'],
@@ -18,4 +13,12 @@ export function getFilenameFromSuit(suit:Suit):string {
     return suitToDescriptionTextMap.get(suit) ?? "";
 }
 
-export default Suit
+const suitToSymbolMap = new Map<Suit, string>([
+    [Suit.CLUBS, 'c'],
+    [Suit.DIAMONDS, 'd'],
+    [Suit.HEARTS, 'h'],
+    [Suit.SPADES, 's'],
+]);
+export function getSymbolFromSuit(suit:Suit):string {
+    return suitToSymbolMap.get(suit) ?? "";
+}

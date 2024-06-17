@@ -1,12 +1,12 @@
-import './OpeningTrainer.css';
 import { useState } from "react";
+import { Helmet } from 'react-helmet';
+import HTTPClient from "../../HTTPClient";
+import Strain from '../../Strain';
+import PtBr from "../../i18n/PtBr";
 import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
-import HTTPClient from "../../HTTPClient";
-import PtBr from "../../i18n/PtBr";
-import Strain from '../../Strain';
-import { Helmet } from 'react-helmet';
-import SampleTypescriptButton from '../SampleTypescriptButton/SampleTypescriptButton'
+import SampleTypescriptButton from '../SampleTypescriptButton/SampleTypescriptButton';
+import './OpeningTrainer.css';
 
 export default function OpeningTrainer() {
 

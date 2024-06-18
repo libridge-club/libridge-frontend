@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Helmet } from 'react-helmet';
 import HTTPClient from "../../HTTPClient";
 import PtBr from "../../i18n/PtBr";
 import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
-import SampleTypescriptButton from '../SampleTypescriptButton/SampleTypescriptButton';
 import './OpeningTrainer.css';
 import { getStrainFromLetter, getSymbolFromStrain } from "../../model/helper/StrainHelper";
 
@@ -16,22 +15,26 @@ export default function OpeningTrainer() {
     const [candidates, setCandidates] = useState<any[]>([]);
     
     const doNothing = () => {}
+    const messages = useMemo(() => new PtBr(), []);
+    const myHttpClient = useMemo(() => new HTTPClient(), []);
     
-    const myHttpClient = new HTTPClient();
-    const messages = new PtBr();
-
-    async function handlerDrawNewBoard(){
+    const handleSubmitForm = useCallback<React.FormEventHandler<HTMLFormElement>>((event) => {
+        event.preventDefault();
         setResultMessage("");
         setHandInPbnStringFormat("");
-        const randomHandWithCall = await myHttpClient.getRandomHandWithCall();
-        if(!randomHandWithCall){
-            alert(messages.error_failedToConnectToServer());
-            return;  
+        const avoidPassCheckbox = (event.currentTarget.elements.namedItem('OpeningTrainer_avoidPassCheckbox') as HTMLInputElement).checked;
+        const callApiAndUpdateState = async (avoidPassCheckbox:boolean) => {
+            const randomHandWithCall = await myHttpClient.getRandomHandWithCall(avoidPassCheckbox);
+            if(!randomHandWithCall){
+                alert(messages.error_failedToConnectToServer());
+                return;
+            }
+            setHandInPbnStringFormat(randomHandWithCall["hand"]);
+            setExpectedCall(randomHandWithCall["call"]);
+            setCandidates(randomHandWithCall["candidates"])
         }
-        setHandInPbnStringFormat(randomHandWithCall["hand"]);
-        setExpectedCall(randomHandWithCall["call"]);
-        setCandidates(randomHandWithCall["candidates"])
-    }
+        callApiAndUpdateState(avoidPassCheckbox);
+    }, [setResultMessage, setHandInPbnStringFormat, setExpectedCall, setCandidates, messages, myHttpClient])
 
     function shouldDrawHand(){
         if (handInPbnStringFormat){
@@ -116,7 +119,14 @@ export default function OpeningTrainer() {
             <div className='OpeningTrainer_BiddingBox'>
                 {shouldDrawBiddingBox()}
             </div>
-            <SampleTypescriptButton className='OpeningTrainer_drawNewBoardButton' onClick={handlerDrawNewBoard} text={messages.drawRandomHand()}/>
+            <form className='OpeningTrainer_form' method="get" onSubmit={handleSubmitForm}>
+                <button className='OpeningTrainer_drawNewBoardButton' type="submit">
+                    {messages.drawRandomHand()}
+                </button>
+                <label>
+                    <input type="checkbox" name="OpeningTrainer_avoidPassCheckbox" defaultChecked={false} />{messages.avoidPassHands()}
+                </label>
+            </form>
             <div className='OpeningTrainer_resultMessage'>
                 <p>{resultMessage}</p>
                 {drawCandidates()}

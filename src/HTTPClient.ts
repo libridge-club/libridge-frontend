@@ -66,8 +66,8 @@ class HTTPClient {
         return this.fetchGet(FULL_URL);
     }
 
-    public async getRandomHandWithCall() {
-        const API_ENDPOINT="openingTrainer/getRandom"
+    public async getRandomHandWithCall(avoidPass:boolean) {
+        const API_ENDPOINT="openingTrainer/getRandom" + (avoidPass ? "?avoidPass=true" : "")
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }

@@ -1,4 +1,5 @@
 export default class En {
+    avoidPassHands = () => "Avoid passing hands."
     benDescription = () => "ben is a Bridge Engine that uses AI. Follow the link to learn more.";
     bid = () => "Bid!";
     correct = () => "Correct!";

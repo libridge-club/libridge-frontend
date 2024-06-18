@@ -11,9 +11,9 @@ import { getStrainFromLetter, getSymbolFromStrain } from "../../model/helper/Str
 export default function OpeningTrainer() {
 
     const [handInPbnStringFormat, setHandInPbnStringFormat] = useState("");
-    const [expectedCall, setExpectedCall] = useState("");
-    const [resultMessage, setResultMessage] = useState("");
-    const [candidates, setCandidates] = useState([]);
+    const [expectedCall, setExpectedCall] = useState<string>("");
+    const [resultMessage, setResultMessage] = useState<string>("");
+    const [candidates, setCandidates] = useState<any[]>([]);
     
     const doNothing = () => {}
     
@@ -41,11 +41,11 @@ export default function OpeningTrainer() {
 
     function shouldDrawBiddingBox(){
         if (handInPbnStringFormat){
-            return <BiddingBox firstPossibleBid="1C" mayDouble="false" mayRedouble="false" parentSubmitHandler={submitHandler}/>
+            return <BiddingBox firstPossibleBid="1C" mayDouble={false} mayRedouble={false} parentSubmitHandler={submitHandler}/>
         }
     }
 
-    function submitHandler(bid){
+    function submitHandler(bid:string){
         if(!expectedCall){
             setResultMessage(messages.error_failedToGetBidFromServer());
         }else if(bid===expectedCall){
@@ -57,8 +57,7 @@ export default function OpeningTrainer() {
         }
     }
 
-    function formatBid(bid){
-        console.log("Formatting bid:" + bid)
+    function formatBid(bid:string){
         if(bid==="P"){
             return "PASS";
         }

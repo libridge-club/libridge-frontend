@@ -6,8 +6,8 @@ import './BiddingBox.css';
 
 type Props = {
     firstPossibleBid:string,
-    mayDouble:string,
-    mayRedouble:string,
+    mayDouble:boolean,
+    mayRedouble:boolean,
     parentSubmitHandler: (a: string) => void
 }
 
@@ -127,11 +127,9 @@ export default function BiddingBox({ firstPossibleBid, mayDouble, mayRedouble, p
         onClick={handleLevelRedouble}
         >XX</button>
     const penaltyButton = () => {
-        const mayDoubleBoolean = mayDouble.toLowerCase()==="true";
-        const mayRedoubleBoolean = mayRedouble.toLowerCase()==="true";
-        if(mayDoubleBoolean){
+        if(mayDouble){
             return doubleButton;
-        } else if(mayRedoubleBoolean){
+        } else if(mayRedouble){
             return redoubleButton;
         } else {
             return <p />; // FIXME This is to avoid the empty row collapsing. There should be a better way to handle this in css.

@@ -1,10 +1,16 @@
-export default class HTTPClient {
+type Options = {
+    method?: string;
+    headers?: any;
+    body?: any
+}
 
-    static SERVER_URL=process.env.REACT_APP_BACKEND_URL
+class HTTPClient {
 
-    fetchComplete(url, method, headers, myBody){
+    private static readonly SERVER_URL = process.env.REACT_APP_BACKEND_URL ?? ""
+
+    private fetchComplete(url:string, method:string, headers:any, myBody:any){
         console.log("fetching " + url)
-        let options = { method }
+        let options:Options = { method }
         if(headers){
             options = { ...options, headers }
         }
@@ -25,28 +31,28 @@ export default class HTTPClient {
         });
     }
 
-    fetchGet(url){
+    private fetchGet(url:string){
         return this.fetchComplete(url, "GET", null, null);
     }
 
-    fetchPut(url, myHeaders, myBody){
+    private fetchPut(url:string, myHeaders:any, myBody:any){
         return this.fetchComplete(url, "PUT", myHeaders, myBody);
     }
 
-    async getTables() {
+    public async getTables() {
         const API_ENDPOINT="tables"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }
 
-    async connect() {
+    public async connect() {
         const CONNECT_ENDPOINT="connect"
         const CONNECT_URL = HTTPClient.SERVER_URL + CONNECT_ENDPOINT 
         return this.fetchGet(CONNECT_URL);
     }
 
 
-    async putNickname(playerId, nickname) {
+    public async putNickname(playerId:string, nickname:string) {
         const CONNECT_ENDPOINT="player/nickname"
         const CONNECT_URL = HTTPClient.SERVER_URL + CONNECT_ENDPOINT
         const myHeaders = {"PlayerUUID": playerId, "Content-Type": "application/json"};
@@ -54,16 +60,18 @@ export default class HTTPClient {
         return this.fetchPut(CONNECT_URL, myHeaders, myBody)
     }
     
-    async getRandomBoard() {
+    public async getRandomBoard() {
         const API_ENDPOINT="boards/getRandom"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }
 
-    async getRandomHandWithCall() {
+    public async getRandomHandWithCall() {
         const API_ENDPOINT="openingTrainer/getRandom"
         const FULL_URL= HTTPClient.SERVER_URL + API_ENDPOINT 
         return this.fetchGet(FULL_URL);
     }
 
 }
+
+export default HTTPClient;

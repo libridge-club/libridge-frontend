@@ -7,5 +7,5 @@ Clone this repository in the server and run
 
 ```
 npm run build
-nohup serve build -p 80 &
+nohup serve dist -p 80 &
 ```

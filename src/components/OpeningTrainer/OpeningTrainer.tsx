@@ -7,7 +7,7 @@ import Hand from "../Hand/Hand";
 import './OpeningTrainer.css';
 import { getStrainFromLetter, getSymbolFromStrain } from "../../model/helper/StrainHelper";
 
-export default function OpeningTrainer() {
+function OpeningTrainer() {
 
     const [handInPbnStringFormat, setHandInPbnStringFormat] = useState("");
     const [expectedCall, setExpectedCall] = useState<string>("");
@@ -135,3 +135,4 @@ export default function OpeningTrainer() {
     );
 }
 
+export default OpeningTrainer

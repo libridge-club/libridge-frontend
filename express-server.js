@@ -3,8 +3,8 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const keyLocation = process.env.KEY_LOCATION
-const certLocation = process.env.CERT_LOCATION
+const keyLocation = import.meta.env.KEY_LOCATION
+const certLocation = import.meta.env.CERT_LOCATION
 const options = {
   key: fs.readFileSync(keyLocation),
   cert: fs.readFileSync(certLocation)

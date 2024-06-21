@@ -6,7 +6,7 @@ type Options = {
 
 class HTTPClient {
 
-    private static readonly SERVER_URL = process.env.REACT_APP_BACKEND_URL ?? ""
+    private static readonly SERVER_URL = import.meta.env.VITE_BACKEND_URL ?? ""
 
     private fetchComplete(url:string, method:string, headers:any, myBody:any){
         console.log("fetching " + url)

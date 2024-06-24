@@ -2,9 +2,14 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { exit } = require('process');
 
-const keyLocation = import.meta.env.KEY_LOCATION
-const certLocation = import.meta.env.CERT_LOCATION
+const keyLocation = process.env.KEY_LOCATION
+const certLocation = process.env.CERT_LOCATION
+if(!keyLocation || !certLocation){
+  console.log("KEY_LOCATION AND CERT_LOCATION environment variables must be set.");
+  exit(1);
+}
 const options = {
   key: fs.readFileSync(keyLocation),
   cert: fs.readFileSync(certLocation)

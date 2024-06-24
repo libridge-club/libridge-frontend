@@ -14,7 +14,7 @@ const options = {
 const app = express();
 const httpsPort = 443
 
-const basePath = "/build"
+const basePath = "/dist"
 
 
 app.use(express.static(path.join(__dirname, basePath)));

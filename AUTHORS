@@ -1,0 +1,13 @@
+Developers
+==========
+Alessandro Wagner Palmeira <contact at libridge.club>
+
+You can check all developers with this command:
+```
+git shortlog --summary --numbered --email
+```
+
+Assets
+==========
+Card Images v0.2
+nicubunu White Deck at Open Clipart - https://openclipart.org/detail/23224/white-deck-ace-of-spades

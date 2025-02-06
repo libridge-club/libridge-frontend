@@ -6,14 +6,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
+import HomeScreen from './components/HomeScreen/HomeScreen';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <OpeningTrainer />, // FIXME fix routing and make /openingTrainer available
+    element: <HomeScreen />,
   },
   {
-    path: "/openingTrainer",
+    path: "openingTrainer",
     element: <OpeningTrainer />,
   },
 ]);

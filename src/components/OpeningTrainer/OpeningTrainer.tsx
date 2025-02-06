@@ -6,6 +6,7 @@ import BiddingBox from "../BiddingBox/BiddingBox";
 import Hand from "../Hand/Hand";
 import './OpeningTrainer.css';
 import { getStrainFromLetter, getSymbolFromStrain } from "../../model/helper/StrainHelper";
+import { Link } from "react-router-dom";
 
 function OpeningTrainer() {
 
@@ -113,6 +114,13 @@ function OpeningTrainer() {
                 <title>libridge.club</title>
                 <meta name="description" content="libridge.club - Free online Bridge" />
             </Helmet>
+            <div className="HomeScreen" >
+                <Link to="/" className="btn btn-primary">
+                    <button type="button">
+                        Go back to Home
+                    </button>
+                </Link>
+            </div>
             <div className='OpeningTrainer_Hand'>
                 {shouldDrawHand()}
             </div>

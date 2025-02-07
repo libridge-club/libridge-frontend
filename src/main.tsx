@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
 import HomeScreen from './components/HomeScreen/HomeScreen';
+import OpeningTrainer from './components/OpeningTrainer/OpeningTrainer';
+import './index.css';
+import BiddingTrainer from './components/BiddingTrainer/BiddingTrainer';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "openingTrainer",
     element: <OpeningTrainer />,
+  },
+  {
+    path: "biddingTrainer",
+    element: <BiddingTrainer />,
   },
 ]);
 

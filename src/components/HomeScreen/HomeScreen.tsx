@@ -9,6 +9,11 @@ function HomeScreen() {
                     Go to Opening Trainer
                 </button>
             </Link>
+            <Link to="/biddingTrainer">
+                <button type="button">
+                    Go to Bidding Trainer
+                </button>
+            </Link>
         </div>
     );
 }
